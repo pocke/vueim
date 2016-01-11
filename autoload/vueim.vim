@@ -31,6 +31,17 @@ function! vueim#get_src(name, body) abort
   return matchstr(line, g:vueim#re_src)
 endfunction
 
+function! s:get_src_current_buf(name) abort
+  let buf = getbufline('.', 1, '$')
+  return vueim#get_src(a:name, buf)
+endfunction
+
+
+function! vueim#edit(cmd, name) abort
+  let src = s:get_src_current_buf(a:name)
+  execute a:cmd . ' ' . src
+endfunction
+
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

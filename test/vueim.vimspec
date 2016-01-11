@@ -26,4 +26,19 @@ Describe Vueim
       PowerAssert matchstr('<style lang="stylus"></style>', g:vueim#re_src) ==# ''
     End
   End
+
+  Describe vueim#get_src
+    let buf = [
+    \   '<template lang="jade">',
+    \   '</template>',
+    \   '<script src="./foo.js"></script>',
+    \   '<style lang="stylus" src="./app.styl"></style>',
+    \ ]
+
+    It should return src
+      PowerAssert vueim#get_src('template', buf) ==# ''
+      PowerAssert vueim#get_src('script', buf) ==# './foo.js'
+      PowerAssert vueim#get_src('style', buf) ==# './app.styl'
+    End
+  End
 End

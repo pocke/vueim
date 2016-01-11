@@ -23,5 +23,14 @@ let g:vueim#re_script_end     = s:re_end_gen('script')
 let g:vueim#re_src = '\vsrc\="\zs[^"]+\ze"'
 
 
+" param name String
+" param body List of String
+" return src file name
+function! vueim#get_src(name, body) abort
+  let line = matchstr(a:body, g:vueim#re_{a:name}_start)
+  return matchstr(line, g:vueim#re_src)
+endfunction
+
+
 let &cpo = s:save_cpo
 unlet s:save_cpo

@@ -1,0 +1,6 @@
+before_script:
+  - mkdir -p ~/.vim/bundle/
+  - make depends
+
+script:
+  - make

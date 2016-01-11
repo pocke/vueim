@@ -1,0 +1,22 @@
+Describe Vueim
+  Before all
+    let V = vital#of('vital')
+    let PowerAssert = V.import('Vim.PowerAssert')
+    execute PowerAssert.define("PowerAssert")
+  End
+
+  Describe g:vueim#re_style_start
+    It should match style tag
+      PowerAssert '<style>' =~# g:vueim#re_style_start
+      PowerAssert '<style lang="stylus">' =~# g:vueim#re_style_start
+      PowerAssert '<style lang="stylus" src="./app.styl"></style>' =~# g:vueim#re_style_start
+    End
+  End
+
+  Describe g:vueim#re_style_start
+    It should match style end tag
+      PowerAssert '</style>' =~# g:vueim#re_style_end
+      PowerAssert '<style lang="stylus" src="./app.styl"></style>' =~# g:vueim#re_style_start
+    End
+  End
+End

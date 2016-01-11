@@ -34,14 +34,14 @@ Describe Vueim
     End
   End
 
-  Describe vueim#get_src
-    let buf = [
-    \   '<template lang="jade">',
-    \   '</template>',
-    \   '<script src="./foo.js"></script>',
-    \   '<style lang="stylus" src="./app.styl"></style>',
-    \ ]
+  let buf = [
+  \   '<template lang="jade">',
+  \   '</template>',
+  \   '<script src="./foo.js"></script>',
+  \   '<style lang="stylus" src="./app.styl"></style>',
+  \ ]
 
+  Describe vueim#get_src
     It should return src
       PowerAssert vueim#get_src('template', buf) ==# ''
       PowerAssert vueim#get_src('script', buf) ==# './foo.js'
@@ -50,13 +50,6 @@ Describe Vueim
   End
 
   Describe vueim#get_lang
-    let buf = [
-    \   '<template lang="jade">',
-    \   '</template>',
-    \   '<script src="./foo.js"></script>',
-    \   '<style lang="stylus" src="./app.styl"></style>',
-    \ ]
-
     It should return lang
       PowerAssert vueim#get_lang('template', buf) ==# 'jade'
       PowerAssert vueim#get_lang('script', buf) ==# ''

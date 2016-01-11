@@ -20,7 +20,8 @@ let g:vueim#re_script_start   = s:re_start_gen('script')
 let g:vueim#re_script_end     = s:re_end_gen('script')
 
 
-let g:vueim#re_src = '\vsrc\="\zs[^"]+\ze"'
+let g:vueim#re_src  = '\vsrc\="\zs[^"]+\ze"'
+let g:vueim#re_lang = '\vlang\="\zs[^"]+\ze"'
 
 
 " param name String
@@ -34,6 +35,17 @@ endfunction
 function! s:get_src_current_buf(name) abort
   let buf = getbufline('.', 1, '$')
   return vueim#get_src(a:name, buf)
+endfunction
+
+
+function! vueim#get_lang(name, body) abort
+  let line = matchstr(a:body, g:vueim#re_{a:name}_start)
+  return matchstr(line, g:vueim#re_lang)
+endfunction
+
+function! s:get_lang_current_buf(name) abort
+  let buf = getbufline('.', 1, '$')
+  return vueim#get_lang(a:name, buf)
 endfunction
 
 

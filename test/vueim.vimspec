@@ -27,6 +27,13 @@ Describe Vueim
     End
   End
 
+  Describe vueim#re_lang
+    It should match lang
+      PowerAssert matchstr('<style lang="stylus" src="./app.styl"></style>', g:vueim#re_lang) ==# 'stylus'
+      PowerAssert matchstr('<style src="./app.styl"></style>', g:vueim#re_lang) ==# ''
+    End
+  End
+
   Describe vueim#get_src
     let buf = [
     \   '<template lang="jade">',
@@ -39,6 +46,21 @@ Describe Vueim
       PowerAssert vueim#get_src('template', buf) ==# ''
       PowerAssert vueim#get_src('script', buf) ==# './foo.js'
       PowerAssert vueim#get_src('style', buf) ==# './app.styl'
+    End
+  End
+
+  Describe vueim#get_lang
+    let buf = [
+    \   '<template lang="jade">',
+    \   '</template>',
+    \   '<script src="./foo.js"></script>',
+    \   '<style lang="stylus" src="./app.styl"></style>',
+    \ ]
+
+    It should return lang
+      PowerAssert vueim#get_lang('template', buf) ==# 'jade'
+      PowerAssert vueim#get_lang('script', buf) ==# ''
+      PowerAssert vueim#get_lang('style', buf) ==# 'stylus'
     End
   End
 End

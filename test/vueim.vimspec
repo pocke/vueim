@@ -19,4 +19,11 @@ Describe Vueim
       PowerAssert '<style lang="stylus" src="./app.styl"></style>' =~# g:vueim#re_style_start
     End
   End
+
+  Describe g:vueim#re_src
+    It should match src
+      PowerAssert matchstr('<style lang="stylus" src="./app.styl"></style>', g:vueim#re_src) ==# './app.styl'
+      PowerAssert matchstr('<style lang="stylus"></style>', g:vueim#re_src) ==# ''
+    End
+  End
 End

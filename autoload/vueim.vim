@@ -49,6 +49,15 @@ function! s:get_lang_current_buf(name) abort
 endfunction
 
 
+function! vueim#get_content(name, body) abort
+  let start_idx = match(a:body, g:vueim#re_{a:name}_start)
+  let end_idx   = match(a:body, g:vueim#re_{a:name}_end)
+
+  " TODO: index check
+  return a:body[ start_idx+1 : end_idx-1 ]
+endfunction
+
+
 function! vueim#edit(cmd, name) abort
   let src = s:get_src_current_buf(a:name)
   execute a:cmd . ' ' . src

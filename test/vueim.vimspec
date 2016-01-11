@@ -36,6 +36,7 @@ Describe Vueim
 
   let buf = [
   \   '<template lang="jade">',
+  \   '  <div></div>',
   \   '</template>',
   \   '<script src="./foo.js"></script>',
   \   '<style lang="stylus" src="./app.styl"></style>',
@@ -54,6 +55,12 @@ Describe Vueim
       PowerAssert vueim#get_lang('template', buf) ==# 'jade'
       PowerAssert vueim#get_lang('script', buf) ==# ''
       PowerAssert vueim#get_lang('style', buf) ==# 'stylus'
+    End
+  End
+
+  Describe vueim#get_content
+    It should return content
+      PowerAssert vueim#get_content('template', buf) ==# ['  <div></div>']
     End
   End
 End

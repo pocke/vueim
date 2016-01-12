@@ -43,17 +43,17 @@ function! vueim#get_lang(name) abort
 endfunction
 
 
-function! vueim#get_content(name, body) abort
-  let start_idx = match(a:body, g:vueim#re_{a:name}_start)
-  let end_idx   = match(a:body, g:vueim#re_{a:name}_end)
+function! vueim#get_content(name) abort
+  let buf = getbufline('.', 1, '$')
+  let start_idx = match(buf, g:vueim#re_{a:name}_start)
+  let end_idx   = match(buf, g:vueim#re_{a:name}_end)
 
   " TODO: index check
-  return a:body[ start_idx+1 : end_idx-1 ]
+  return buf[ start_idx+1 : end_idx-1 ]
 endfunction
 
 function! s:new_buffer_with_content(cmd, name) abort
-  let buf = getbufline('.', 1, '$')
-  let content = vueim#get_content(a:name, buf)
+  let content = vueim#get_content(a:name)
   execute a:cmd
   call append(0, content)
   call feedkeys('Gddgg')

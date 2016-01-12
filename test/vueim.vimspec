@@ -34,37 +34,35 @@ Describe Vueim
     End
   End
 
-  let buf = [
-  \   '<template lang="jade">',
-  \   '  <div></div>',
-  \   '</template>',
-  \   '<script src="./foo.js"></script>',
-  \   '<style lang="stylus" src="./app.styl"></style>',
-  \ ]
 
-  Describe vueim#get_src
+  Context with app.vue
     Before
-      edit ./test/data/app.vue
+      tabedit ./test/data/app.vue
+    End
+    After
+      tabclose
     End
 
-    It should return src
-      PowerAssert vueim#get_src('template') ==# ''
-      PowerAssert vueim#get_src('script') ==# ''
-      PowerAssert vueim#get_src('style') ==# './app.styl'
+    Describe vueim#get_src
+      It should return src
+        PowerAssert vueim#get_src('template') ==# ''
+        PowerAssert vueim#get_src('script') ==# ''
+        PowerAssert vueim#get_src('style') ==# './app.styl'
+      End
     End
-  End
 
-  Describe vueim#get_lang
-    It should return lang
-      PowerAssert vueim#get_lang('template') ==# 'jade'
-      PowerAssert vueim#get_lang('script') ==# ''
-      PowerAssert vueim#get_lang('style') ==# 'stylus'
+    Describe vueim#get_lang
+      It should return lang
+        PowerAssert vueim#get_lang('template') ==# 'jade'
+        PowerAssert vueim#get_lang('script') ==# ''
+        PowerAssert vueim#get_lang('style') ==# 'stylus'
+      End
     End
-  End
 
-  Describe vueim#get_content
-    It should return content
-      PowerAssert vueim#get_content('template', buf) ==# ['  <div></div>']
+    Describe vueim#get_content
+      It should return content
+        PowerAssert vueim#get_content('template') ==# ['div#app', '  h1 {{fib(100)}}']
+      End
     End
   End
 End

@@ -57,10 +57,27 @@ function! vueim#get_content(name, body) abort
   return a:body[ start_idx+1 : end_idx-1 ]
 endfunction
 
+function! s:new_buffer_with_content(cmd, name) abort
+  let buf = getbufline('.', 1, '$')
+  let content = vueim#get_content(a:name, buf)
+  execute a:cmd
+  call append(0, content)
+endfunction
+
 
 function! vueim#edit(cmd, name) abort
   let src = s:get_src_current_buf(a:name)
-  execute a:cmd . ' ' . src
+  if src != ""
+    execute a:cmd . ' ' . src
+  else
+    if a:cmd == 'edit'
+      let c = 'enew'
+    elseif a:cmd == 'tabedit'
+      let c = 'tabnew'
+    endif
+
+    call s:new_buffer_with_content(c, a:name)
+  endif
 endfunction
 
 

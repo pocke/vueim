@@ -25,27 +25,21 @@ let g:vueim#re_lang = '\vlang\="\zs[^"]+\ze"'
 
 
 " param name String
-" param body List of String
 " return src file name
-function! vueim#get_src(name, body) abort
-  let line = matchstr(a:body, g:vueim#re_{a:name}_start)
+function! vueim#get_src(name) abort
+  let buf = getbufline('.', 1, '$')
+  let line = matchstr(buf, g:vueim#re_{a:name}_start)
+
   return matchstr(line, g:vueim#re_src)
 endfunction
 
-function! s:get_src_current_buf(name) abort
+" param name String
+" return lang language name
+function! vueim#get_lang(name) abort
   let buf = getbufline('.', 1, '$')
-  return vueim#get_src(a:name, buf)
-endfunction
+  let line = matchstr(buf, g:vueim#re_{a:name}_start)
 
-
-function! vueim#get_lang(name, body) abort
-  let line = matchstr(a:body, g:vueim#re_{a:name}_start)
   return matchstr(line, g:vueim#re_lang)
-endfunction
-
-function! s:get_lang_current_buf(name) abort
-  let buf = getbufline('.', 1, '$')
-  return vueim#get_lang(a:name, buf)
 endfunction
 
 
@@ -62,11 +56,12 @@ function! s:new_buffer_with_content(cmd, name) abort
   let content = vueim#get_content(a:name, buf)
   execute a:cmd
   call append(0, content)
+  call feedkeys('Gddgg')
 endfunction
 
 
 function! vueim#edit(cmd, name) abort
-  let src = s:get_src_current_buf(a:name)
+  let src = vueim#get_src(a:name)
   if src != ""
     execute a:cmd . ' ' . src
   else

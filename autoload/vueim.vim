@@ -39,10 +39,25 @@ function! vueim#get_lang(name) abort
   let buf = getbufline('.', 1, '$')
   let line = matchstr(buf, g:vueim#re_{a:name}_start)
 
-  return matchstr(line, g:vueim#re_lang)
+  let lang = matchstr(line, g:vueim#re_lang)
+  if lang != ''
+    return lang
+  endif
+
+  if a:name ==# 'style'
+    return 'css'
+  elseif a:name ==# 'script'
+    return 'javascript'
+  elseif a:name ==# 'template'
+    return 'html'
+  endif
+
+  throw "Unreachable code!"
 endfunction
 
 
+" param name String
+" return content Array of String
 function! vueim#get_content(name) abort
   let buf = getbufline('.', 1, '$')
   let start_idx = match(buf, g:vueim#re_{a:name}_start)
@@ -52,26 +67,32 @@ function! vueim#get_content(name) abort
   return buf[ start_idx+1 : end_idx-1 ]
 endfunction
 
+" param cmd String
+" param name String
 function! s:new_buffer_with_content(cmd, name) abort
+  if a:cmd == 'edit'
+    let c = 'enew'
+  elseif a:cmd == 'tabedit'
+    let c = 'tabnew'
+  endif
+
   let content = vueim#get_content(a:name)
-  execute a:cmd
+  execute c
   call append(0, content)
-  call feedkeys('Gddgg')
+  call feedkeys('Gddgg') " XXX: なんかもっといい方法を知りたい
+
+  let lang = vueim#get_lang(a:name)
+  execute 'setl ft=' . lang
 endfunction
 
 
 function! vueim#edit(cmd, name) abort
   let src = vueim#get_src(a:name)
   if src != ""
+    " TODO: 相対パス
     execute a:cmd . ' ' . src
   else
-    if a:cmd == 'edit'
-      let c = 'enew'
-    elseif a:cmd == 'tabedit'
-      let c = 'tabnew'
-    endif
-
-    call s:new_buffer_with_content(c, a:name)
+    call s:new_buffer_with_content(a:cmd, a:name)
   endif
 endfunction
 

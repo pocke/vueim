@@ -40,7 +40,7 @@ Describe Vueim
       tabedit ./test/data/app.vue
     End
     After
-      tabclose
+      tabclose!
     End
 
     Describe vueim#get_src
@@ -54,7 +54,7 @@ Describe Vueim
     Describe vueim#get_lang
       It should return lang
         PowerAssert vueim#get_lang('template') ==# 'jade'
-        PowerAssert vueim#get_lang('script') ==# ''
+        PowerAssert vueim#get_lang('script') ==# 'javascript'
         PowerAssert vueim#get_lang('style') ==# 'stylus'
       End
     End
@@ -62,6 +62,25 @@ Describe Vueim
     Describe vueim#get_content
       It should return content
         PowerAssert vueim#get_content('template') ==# ['div#app', '  h1 {{fib(100)}}']
+      End
+    End
+
+    Describe vueim#edit
+      It template should open a new buffer
+        call vueim#edit('tabedit', 'template')
+        PowerAssert getbufline('.', 1, '$') !=# []
+        PowerAssert &ft ==# 'jade'
+      End
+
+      It script should open a new buffer
+        call vueim#edit('tabedit', 'script')
+        PowerAssert getbufline('.', 1, '$') !=# []
+        PowerAssert &ft ==# 'javascript'
+      End
+
+      It style should open a new file
+        call vueim#edit('tabedit', 'style')
+        PowerAssert bufname("%") ==# './app.styl'
       End
     End
   End

@@ -70,17 +70,23 @@ Describe Vueim
         call vueim#edit('tabedit', 'template')
         PowerAssert getbufline('.', 1, '$') !=# []
         PowerAssert &ft ==# 'jade'
+        PowerAssert &modified ==# 0
+        PowerAssert &buftype ==# 'acwrite'
       End
 
       It script should open a new buffer
         call vueim#edit('tabedit', 'script')
         PowerAssert getbufline('.', 1, '$') !=# []
         PowerAssert &ft ==# 'javascript'
+        PowerAssert &modified ==# 0
+        PowerAssert &buftype ==# 'acwrite'
       End
 
       It style should open a new file
         call vueim#edit('tabedit', 'style')
         PowerAssert bufname("%") ==# './app.styl'
+        PowerAssert &modified ==# 0
+        PowerAssert &buftype ==# ''
       End
     End
   End

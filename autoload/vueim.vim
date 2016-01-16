@@ -79,10 +79,12 @@ function! s:new_buffer_with_content(cmd, name) abort
   let content = vueim#get_content(a:name)
   execute c
   call append(0, content)
-  call feedkeys('Gddgg') " XXX: なんかもっといい方法を知りたい
+  $delete
 
   let lang = vueim#get_lang(a:name)
   execute 'setl ft=' . lang
+  setl nomodified
+  setl buftype=acwrite
 endfunction
 
 

@@ -84,7 +84,7 @@ Describe Vueim
 
       It style should open a new file
         call vueim#edit('tabedit', 'style')
-        PowerAssert bufname("%") ==# './app.styl'
+        PowerAssert fnamemodify(bufname("%"), ':t') ==# 'app.styl'
         PowerAssert &modified ==# 0
         PowerAssert &buftype ==# ''
       End

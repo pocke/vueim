@@ -27,7 +27,7 @@ let g:vueim#re_lang = '\vlang\="\zs[^"]+\ze"'
 " param name String
 " return src file name
 function! vueim#get_src(name) abort
-  let buf = getbufline('.', 1, '$')
+  let buf = getbufline('%', 1, '$')
   let line = matchstr(buf, g:vueim#re_{a:name}_start)
 
   return matchstr(line, g:vueim#re_src)
@@ -36,7 +36,7 @@ endfunction
 " param name String
 " return lang language name
 function! vueim#get_lang(name) abort
-  let buf = getbufline('.', 1, '$')
+  let buf = getbufline('%', 1, '$')
   let line = matchstr(buf, g:vueim#re_{a:name}_start)
 
   let lang = matchstr(line, g:vueim#re_lang)
@@ -55,11 +55,20 @@ function! vueim#get_lang(name) abort
   throw "Unreachable code!"
 endfunction
 
+" param lang String
+function! vueim#lang_to_extension(lang) abort
+  let table = {
+  \   'javascript': 'js',
+  \   'stylus': 'styl',
+  \ }
+  return get(table, a:lang, a:lang)
+endfunction
+
 
 " param name String
 " return content Array of String
 function! vueim#get_content(name) abort
-  let buf = getbufline('.', 1, '$')
+  let buf = getbufline('%', 1, '$')
   let start_idx = match(buf, g:vueim#re_{a:name}_start)
   let end_idx   = match(buf, g:vueim#re_{a:name}_end)
 
@@ -70,19 +79,14 @@ endfunction
 " param cmd String
 " param name String
 function! s:new_buffer_with_content(cmd, name) abort
-  if a:cmd == 'edit'
-    let c = 'enew'
-  elseif a:cmd == 'tabedit'
-    let c = 'tabnew'
-  endif
-
   let content = vueim#get_content(a:name)
-  execute c
+  let lang = vueim#get_lang(a:name)
+  let ext  = vueim#lang_to_extension(lang)
+  " TOOD: filename
+  execute a:cmd . ' vueim://app.' . ext
   call append(0, content)
   $delete
 
-  let lang = vueim#get_lang(a:name)
-  execute 'setl ft=' . lang
   setl nomodified
   setl buftype=acwrite
 endfunction

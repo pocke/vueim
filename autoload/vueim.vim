@@ -95,7 +95,7 @@ endfunction
 function! vueim#edit(cmd, name) abort
   let src = vueim#get_src(a:name)
   if src != ""
-    " TODO: 相対パス
+    let src = fnamemodify(bufname('%'), ":p:h") . '/' . src
     execute a:cmd . ' ' . src
   else
     call s:new_buffer_with_content(a:cmd, a:name)

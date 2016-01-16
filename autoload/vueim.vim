@@ -102,6 +102,13 @@ function! vueim#edit(cmd, name) abort
   endif
 endfunction
 
+function! vueim#split_all(cmd) abort
+  call vueim#edit(a:cmd, 'style')
+  wincmd w
+  call vueim#edit(a:cmd, 'template')
+  wincmd w
+  call vueim#edit('edit', 'script')
+endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

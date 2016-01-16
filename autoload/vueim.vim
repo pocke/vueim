@@ -83,7 +83,14 @@ function! s:new_buffer_with_content(cmd, name) abort
   let lang = vueim#get_lang(a:name)
   let ext  = vueim#lang_to_extension(lang)
   let fpath = fnamemodify(bufname('%'), ':p:r')
+
+  let parent_bufnr = bufnr('%')
+
+
   execute a:cmd . ' vueim:/' . fpath . '.' . ext
+
+  let b:vueim_parent_bufnr = parent_bufnr
+  let b:vueim_name = a:name
   call append(0, content)
   $delete
 
@@ -108,6 +115,21 @@ function! vueim#split_all(cmd) abort
   call vueim#edit(a:cmd, 'template')
   wincmd w
   call vueim#edit('edit', 'script')
+endfunction
+
+function! vueim#write_file() abort
+  let current_bufnr = bufnr('%')
+  let content = getbufline('%', 1, '$')
+  let parent_content = getbufline(b:vueim_parent_bufnr, 1, '$')
+  let start_idx = match(parent_content, g:vueim#re_{b:vueim_name}_start) + 2
+  let end_idx   = match(parent_content, g:vueim#re_{b:vueim_name}_end)
+
+  execute 'buffer ' . b:vueim_parent_bufnr
+  execute start_idx . ',' . end_idx . 'delete'
+  call append(start_idx-1, content)
+  w
+  execute 'buffer ' . current_bufnr
+  setl nomodified
 endfunction
 
 let &cpo = s:save_cpo
